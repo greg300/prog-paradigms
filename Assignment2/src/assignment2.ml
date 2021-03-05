@@ -102,8 +102,6 @@ let _ = print_string ("Testing your code ...\n")
 
 let main () =
   let error_count = ref 0 in
-  (*let print_int_list_list = List.iter (List.iter (Printf.printf "%d ")) in
-  print_int_list_list (buckets (=) [1;2;3;4]) *)
   
   (* Testcases for cond_dup *)
   let _ =
