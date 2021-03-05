@@ -34,23 +34,6 @@ let rec is_in_bucket target bucket p =
   | [] -> false
   | (h :: t) -> if (p target h) then true else is_in_bucket target t p
 
-(*let rec buckets_add p l =
-  match l with
-  | [] -> []
-  | (h :: t) -> [h] :: buckets_add p t
-
-let rec merge_bucket target buckets p =
-  match buckets with
-  | [] -> buckets
-  | (h :: t) -> if p (first target) (first h) then (target @ h) :: merge_bucket (target @ h) t p else (target) :: merge_bucket target t p
-
-let rec buckets_sort sorted unsorted p =
-  match unsorted with
-  | [] -> sorted
-  | (h1 :: t1) -> (let newly_sorted = (merge_bucket h1 t1 p) in match newly_sorted with
-    | [] -> newly_sorted
-    | (h2 :: t2) -> buckets_sort newly_sorted t2 p) *)
-
 
 (* Create a bucket with first element
 Add all equivalent elements in list to that bucket
@@ -81,32 +64,8 @@ let rec buckets_create buckets l p =
     let removed_duplicates = remove_equiv_elements h1 l [] p in
     buckets_create (buckets @ [new_bucket]) removed_duplicates p
 
-(*
-  (match buckets with
-    | [] -> let new_bucket = bucket_add h1 ([h1] :: buckets) t1 p
-    | (h2 :: t2) ->
-      if (is_in_bucket h1 h2 p) then
-        buckets_create ((bucket_add h1 h2 t1 p) :: t2) t1 p
-      else
-        buckets_create  ) *)
-
-
-
-(*let rec buckets_sort p sorted_buckets l =
-  match l with
-  | [] -> []
-  | (h1 :: t1) -> (match t1 with
-    | (h2 :: t2) -> if (p h1 h2) then h1 @ h2 :: buckets_sort p t2 l else buckets_sort)  *)
-
 let buckets p l =
   buckets_create [] l p
-  (*let single_buckets = buckets_add p l in
-  buckets_sort [[]] single_buckets p *)
-
-  (*buckets_add [[]] l p*)
-
-  
-
 
 
 let rec fib n prev cur =
