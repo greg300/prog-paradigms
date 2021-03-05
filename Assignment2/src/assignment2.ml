@@ -23,22 +23,21 @@ let rec zipwith f l1 l2 =
     
 
 
-(*let first l =
+let first l =
   match l with
   | [] -> []
   | (h :: t) -> h
 
-let rec buckets_add p l =
+(* Return true if target is in the given bucket. *)
+let rec is_in_bucket target bucket p =
+  match bucket with
+  | [] -> false
+  | (h :: t) -> if (p target h) then true else is_in_bucket target t p
+
+(*let rec buckets_add p l =
   match l with
   | [] -> []
   | (h :: t) -> [h] :: buckets_add p t
-
-(*let rec buckets_add buckets l p =
-  match l with
-  | [] -> buckets
-  | (h1 :: t1) -> (match buckets with
-    | [] -> buckets_add ([h1] :: buckets) t1 p
-    | (h2 :: t2) -> if (p h1 (first h2)) then buckets_add (((h2 @ [h1]) :: t2) t1 p) else h2 :: buckets_add t2 l p)*)
 
 let rec merge_bucket target buckets p =
   match buckets with
@@ -50,19 +49,63 @@ let rec buckets_sort sorted unsorted p =
   | [] -> sorted
   | (h1 :: t1) -> (let newly_sorted = (merge_bucket h1 t1 p) in match newly_sorted with
     | [] -> newly_sorted
-    | (h2 :: t2) -> buckets_sort newly_sorted t2 p)
+    | (h2 :: t2) -> buckets_sort newly_sorted t2 p) *)
+
+
+(* Create a bucket with first element
+Add all equivalent elements in list to that bucket
+Remove all equivalent elements from list
+Repeat until list is empty -> return list of buckets *)
+
+(* Add all equivalent elements to target in l to a bucket, assuming target is first element in bucket. *)
+let rec bucket_add target bucket l p =
+  match l with
+  | [] -> bucket
+  | (h :: t) -> if (p target h) then bucket_add target (bucket @ [h]) t p else bucket_add target (bucket) t p
+
+(* Remove all elements equivalent to target from l. *)
+let rec remove_equiv_elements target l newlist p =
+  match l with
+  | [] -> newlist
+  | (h :: t) ->
+    if (p target h) then
+      remove_equiv_elements target t (newlist) p
+    else
+      remove_equiv_elements target t (newlist @ [h]) p
+
+let rec buckets_create buckets l p =
+  match l with
+  | [] -> buckets
+  | (h1 :: t1) ->
+    let new_bucket = bucket_add h1 [h1] t1 p in
+    let removed_duplicates = remove_equiv_elements h1 l [] p in
+    buckets_create (buckets @ [new_bucket]) removed_duplicates p
+
+(*
+  (match buckets with
+    | [] -> let new_bucket = bucket_add h1 ([h1] :: buckets) t1 p
+    | (h2 :: t2) ->
+      if (is_in_bucket h1 h2 p) then
+        buckets_create ((bucket_add h1 h2 t1 p) :: t2) t1 p
+      else
+        buckets_create  ) *)
+
+
 
 (*let rec buckets_sort p sorted_buckets l =
   match l with
   | [] -> []
   | (h1 :: t1) -> (match t1 with
     | (h2 :: t2) -> if (p h1 h2) then h1 @ h2 :: buckets_sort p t2 l else buckets_sort)  *)
-*)
+
 let buckets p l =
+  buckets_create [] l p
   (*let single_buckets = buckets_add p l in
-  buckets_sort [[]] single_buckets p*)
-  []
+  buckets_sort [[]] single_buckets p *)
+
   (*buckets_add [[]] l p*)
+
+  
 
 
 
@@ -100,7 +143,9 @@ let _ = print_string ("Testing your code ...\n")
 
 let main () =
   let error_count = ref 0 in
-
+  (*let print_int_list_list = List.iter (List.iter (Printf.printf "%d ")) in
+  print_int_list_list (buckets (=) [1;2;3;4]) *)
+  
   (* Testcases for cond_dup *)
   let _ =
     try
