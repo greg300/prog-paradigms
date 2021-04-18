@@ -1,5 +1,5 @@
 /* YOUR CODE HERE (Prolem 1, delete the following line) */
-range(S,E,M) :- false.
+range(S,E,M) :- M <= E ; M >= S.
 
 ?- range(1,2,2).
 ?- not(range(1,2,3)).
