@@ -57,34 +57,21 @@ insert(X, [YH | YT], [YH | Ws]) :-
 ?- insert(3, L, [1,3,3,5]).
 
 /* YOUR CODE HERE (Prolem 6, delete the following line) */
-remove_duplicates(Xs, Ys) :-
-    reverseL(Xs, RevXs),
-    remove_duplicates_aux(RevXs, RevYs),
-    reverseL(RevYs, Ys).
-
-remove_duplicates_aux([], []).
-remove_duplicates_aux([XH | XT], Ys) :-
-    memberL(XH, XT),
-    remove_duplicates_aux(XT, Ys).
-remove_duplicates_aux([XH | XT], [XH | Ys]) :-
-    remove_duplicates_aux(XT, Ys).
+remove_duplicates([], []).
+remove_duplicates([E], [E]).
+remove_duplicates([XH | XT], Ys) :-
+    memberL(XH, Ys),
+    remove_duplicates(XT, Ys).
+remove_duplicates([XH | XT], [XH | Ys]) :-
+    /+(memberL(XH, Ys)),
+    remove_duplicates(XT, Ys).
 
 ?- remove_duplicates([1,2,3,4,2,3],X).
 ?- remove_duplicates([1,4,5,4,2,7,5,1,3],X).
 ?- remove_duplicates([], X).
 
 /* YOUR CODE HERE (Prolem 7, delete the following line) */
-% Need to remove duplicates!
-intersectionL(L1, L2, L3) :-
-    intersectionL_aux(L1, L2, DupL3),
-    remove_duplicates(DupL3, L3).
-
-intersectionL_aux([], _, []).  % Base case.
-intersectionL_aux([H1 | T1], L2, [H1 | Y]) :-  % H1 is in the intersection.
-    memberL(H1, L2),
-    intersectionL_aux(T1, L2, Y).
-intersectionL_aux([H1 | T1], L2, Y) :-  % H1 is not in the intersection.
-    intersectionL_aux(T1, L2, Y).
+intersectionL(L1,L2,L3) :- false.
 
 ?- intersectionL([1,2,3,4],[1,3,5,6],[1,3]).
 ?- intersectionL([1,2,3,4],[1,3,5,6],X).
@@ -94,48 +81,21 @@ intersectionL_aux([H1 | T1], L2, Y) :-  % H1 is not in the intersection.
 prefix(P,L) :- append(P,_,L).
 suffix(S,L) :- append(_,S,L).
 
-len([], 0).
-len([H | T], N) :-
-    len(T, M), N is M+1.
-
-partition([], [], []).
-partition([H], [H], []).
-partition(L, P, S) :-
-    append(P, S, L),
-    len(L, N),
-    DivN is div(N, 2),
-    prefix(P, L),
-    len(P, DivN),
-    suffix(S, L),
-    len(S, SLen),
-    SLen is N - DivN.
+partition(L,P,S) :- false.
 
 ?- partition([a],[a],[]).
 ?- partition([1,2,3],[1],[2,3]).
 ?- partition([a,b,c,d],X,Y).
 
 /* YOUR CODE HERE (Prolem 9, delete the following line) */
-merge([], Y, Y).
-merge(X, [], X).
-merge([XH | XT], [YH | YT], [XH | Z]) :-
-    XH =< YH,
-    merge(XT, [YH | YT], Z).
-merge([XH | XT], [YH | YT], [YH | Z]) :-
-    YH =< XH,
-    merge([XH | XT], YT, Z).
+merge(X,Y,Z) :- false.
 
 ?- merge([],[1],[1]).
 ?- merge([1],[],[1]).
 ?- merge([1,3,5],[2,4,6],X).
 
 /* YOUR CODE HERE (Prolem 10, delete the following line) */
-mergesort([], []).
-mergesort([X], [X]).
-mergesort(L, SL) :-
-    partition(L, P, S),
-    mergesort(P, SP),
-    mergesort(S, SS),
-    merge(SP, SS, SL).
+mergesort(L,SL) :- false.
 
 ?- mergesort([3,2,1],X).
 ?- mergesort([1,2,3],Y).
