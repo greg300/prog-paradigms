@@ -138,14 +138,6 @@ def level_order(root: TreeNode):
     return levelOrderList
 
 
-# root_2 = TreeNode()
-# root_2.list_to_tree([1,2,3])
-# print(level_order(root_2))
-# root_1 = TreeNode()
-# root_1.list_to_tree([5,4,8,11,None,13,4,7,2,None,None,5,1])
-# print(level_order(root_1))
-
-
 #################
 ### Problem  5 ##
 #################
@@ -156,20 +148,10 @@ def pathSumAux(root: TreeNode, rootLeafPaths, rootLeafPathsSums, pathNum, currPa
 
     newPath = currPath + [root.val]
     newSum = currSum + root.val
-    # print("**** On node " + str(root.val))
-    # print("Path num: " + str(pathNum[0]))
-    # print("Current path: " + str(currPath))
-    # print("Current sum: " + str(currSum))
-    # print("New path: " + str(newPath))
-    # print("New sum: " + str(newSum))
-    # print("")
+
     if pathNum[0] >= len(rootLeafPaths):  # There is no entry in the list of paths for the current path.
-        #if pathNum > 0:  # This is not the first path.
         rootLeafPaths.append(newPath)
         rootLeafPathsSums.append(newSum)
-        #else:  # This is the first path.
-            #rootLeafPaths.append([root.val])
-            #rootLeafPathsSums.append(root.val)
     else:  # There is already an entry in the list of paths for the current path.
         rootLeafPaths[pathNum[0]].append(root.val)
         rootLeafPathsSums[pathNum[0]] += root.val
@@ -183,40 +165,12 @@ def pathSumAux(root: TreeNode, rootLeafPaths, rootLeafPathsSums, pathNum, currPa
         pathSumAux(root.right, rootLeafPaths, rootLeafPathsSums, pathNum, newPathCopy, newSum)
 
 
-
-
-
 def pathSum(root: TreeNode, targetSum: int) -> List[List[int]]:
-    # sumPaths = []  # To be returned.
-    # rootLeafPaths = []
-    # roofLeafPathsSums = []
-
-    # currentNodesToCheck = [root]
-    # nextNodesToCheck = []
-    # pathNum = 0
-
-    # while len(currentNodesToCheck) > 0:
-    #     rootLeafPaths.append([])
-    #     nextNodesToCheck = []
-    #     for i in range(len(currentNodesToCheck)):
-    #         curr = currentNodesToCheck.pop(0)
-    #         if curr is None:
-    #             continue
-    #         rootLeafPaths[pathNum].append(curr.val)
-    #         nextNodesToCheck.append(curr.left)
-    #         nextNodesToCheck.append(curr.right)
-        
-    #     currentNodesToCheck = copy.copy(nextNodesToCheck)
-    #     pathNum += 1
-
     sumPaths = []  # To be returned.
     rootLeafPaths = []
     rootLeafPathsSums = []
 
     pathSumAux(root, rootLeafPaths, rootLeafPathsSums, [0], [], 0)
-
-    # print(rootLeafPaths)
-    # print(rootLeafPathsSums)
 
     for i in range(len(rootLeafPathsSums)):
         if rootLeafPathsSums[i] == targetSum:
