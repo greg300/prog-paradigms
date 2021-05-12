@@ -118,6 +118,8 @@ class Interpreter:
 				elif isinstance(s[t], Variable):
 					# print("Substituting " + str(t) + " with " + str(s[t]))
 					return Variable(s[t].value)
+				elif isinstance(s[t], Function):
+					return Function(s[t].relation, s[t].terms)
 			else:
 				return t
 		else:
@@ -276,5 +278,35 @@ class Interpreter:
 	If the given goal is not a logical consequence of the program, then the result
 	is an empty list. See the test cases (in src/main.py) as examples.
 	'''
+	def get_unifier (self, rule : Rule, goal : Term) -> dict:
+		try:
+			ap = self.freshen(rule)
+			theta = self.unify(goal, ap.head)
+			return theta
+		except Not_unifiable:
+			return None
+
+	def try_goal(self, goal : Term, program : List[Rule], returnList) -> bool:
+		for i in range(len(program)):
+			unifier = self.get_unifier(program[i], goal)
+			if unifier is not None:
+				if len(program[i].body.terms) == 0:
+					#return True
+					for k in range(len(resolvent)):
+						resolvent[k] = self.substitute_in_term(theta, resolvent[k])
+				else:
+					result = True
+					for j in range(len(program[i].body.terms)):
+						result = self.try_goal(program[i].body.terms[j], program)
+						if not result:
+							break
+					if result:
+						return True
+					else:
+						continue
+			else:
+				continue
+
 	def det_query (self, program : List[Rule], pgoal : List[Term]) -> List[List[Term]]:
-		return [pgoal]
+		for i in range(len(pgoal)):
+			self.try_goal(pgoal[i], program)
