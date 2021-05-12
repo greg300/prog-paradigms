@@ -345,11 +345,4 @@ if __name__ == '__main__':
 		_, _, tb = sys.exc_info()
 		traceback.print_tb(tb)
 
-	# t1 = [append (Variable("X"), Variable("Y"), \
-	# 			(cons (Number("1"), (cons (Number("2"), (cons (Number("3"), nil)))))))]
-	# t2 = [append (nil, Variable("_G46"), Variable("_G46"))]
-	# print("\nt1: " + str(t1[0]))
-	# print("\nt2: " + str(t2[0]))
-	# print(interpreter.unify (t1, t2))
-
 	print (f"{error_count} out of 5 programming questions are incorrect.")

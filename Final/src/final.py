@@ -88,10 +88,6 @@ class Interpreter:
 	Please use Python dictionary to represent a subsititution map.
 	'''
 	def substitute_in_term (self, s : dict, t : Term) -> Term:
-		# print("Substituting " + str(t) + " " + str(type(t)))
-		# print("With theta: ")
-		# for k in s.keys():
-		# 		print("\t" + str(k) + ", " + str(s[k]))
 		keys = s.keys()
 		# If t is a Function:
 		if isinstance(t, Function):
@@ -116,7 +112,6 @@ class Interpreter:
 				elif isinstance(s[t], Number):
 					return Number(s[t].value)
 				elif isinstance(s[t], Variable):
-					# print("Substituting " + str(t) + " with " + str(s[t]))
 					return Variable(s[t].value)
 				elif isinstance(s[t], Function):
 					return Function(s[t].relation, s[t].terms)
@@ -146,7 +141,6 @@ class Interpreter:
 	Please use Python dictionary to represent a subsititution map.
 	'''
 	def rec_unify (self, t1: Term, t2: Term, s: dict) -> dict:
-		#print("HERE, theta: " + str(s))
 		x = self.substitute_in_term(s, t1)
 		y = self.substitute_in_term(s, t2)
 
@@ -170,15 +164,6 @@ class Interpreter:
 
 			return s
 
-			# for i in range(len(x.terms)):
-			# 	xt = x.terms[i]
-			# 	yt = y.terms[i]
-			# 	if isinstance(xt, Variable):
-			# 		s[xt] = self.substitute_in_term(s, yt)
-				
-			# print("New theta: ")
-			# for k in s.keys():
-			# 	print("\t" + str(k) + ", " + str(s[k]))
 		else:
 			raise Not_unifiable()
 
@@ -230,7 +215,6 @@ class Interpreter:
 			resolvent = copy.copy(g)
 			while len(resolvent) > 0:
 				if not self.exists_unifiable_pair(resolvent, program):
-					print("No such pair.")
 					break
 
 				i = random.randint(0, len(resolvent) - 1)
@@ -240,11 +224,6 @@ class Interpreter:
 				ap = self.freshen(program[j])
 				try:
 					theta = self.unify(a, ap.head)
-					print("\nOld resolvent: ")
-					print(*(x for x in resolvent), sep=', ')
-					print("\nOld G: ")
-					print(*(x for x in g), sep=', ')
-					print("\nUnified " + str(a) + " and " + str(ap.head))
 					resolvent.remove(a)
 					for term in ap.body.terms:
 						resolvent.append(term)
@@ -252,14 +231,9 @@ class Interpreter:
 						resolvent[k] = self.substitute_in_term(theta, resolvent[k])
 					for k in range(len(g)):
 						g[k] = self.substitute_in_term(theta, g[k])
-					print("\nNew resolvent: ")
-					print(*(x for x in resolvent), sep=', ')
-					print("\nNew G: ")
-					print(*(x for x in g), sep=', ')
 				except Not_unifiable:
 					pass
 			if len(resolvent) == 0:
-				#print(g)
 				return g
 			else:
 				continue
@@ -278,35 +252,65 @@ class Interpreter:
 	If the given goal is not a logical consequence of the program, then the result
 	is an empty list. See the test cases (in src/main.py) as examples.
 	'''
-	def get_unifier (self, rule : Rule, goal : Term) -> dict:
-		try:
-			ap = self.freshen(rule)
-			theta = self.unify(goal, ap.head)
-			return theta
-		except Not_unifiable:
-			return None
+	# def get_unifier (self, rule : Rule, goal : Term) -> dict:
+	# 	try:
+	# 		ap = self.freshen(rule)
+	# 		theta = self.unify(goal, ap.head)
+	# 		return theta
+	# 	except Not_unifiable:
+	# 		return None
 
-	def try_goal(self, goal : Term, program : List[Rule], returnList) -> bool:
-		for i in range(len(program)):
-			unifier = self.get_unifier(program[i], goal)
-			if unifier is not None:
-				if len(program[i].body.terms) == 0:
-					#return True
-					for k in range(len(resolvent)):
-						resolvent[k] = self.substitute_in_term(theta, resolvent[k])
-				else:
-					result = True
-					for j in range(len(program[i].body.terms)):
-						result = self.try_goal(program[i].body.terms[j], program)
-						if not result:
-							break
-					if result:
-						return True
-					else:
-						continue
-			else:
-				continue
+	# def combine_dicts(self, d1, d2):
+	# 	res = {**d1, **d2}
+	# 	return res
+
+	# def try_goal(self, goal : Term, program : List[Rule], theta : dict) -> List[Term]:
+	# 	newGoal = self.substitute_in_term(theta, goal)
+	# 	substitutedGoals = []
+	# 	for i in range(len(program)):
+	# 		unifier = self.get_unifier(program[i], newGoal)
+	# 		if unifier is not None:
+	# 			if len(program[i].body.terms) == 0:
+	# 				substitutedGoals.append(self.substitute_in_term(unifier, newGoal))
+	# 				#return True
+					
+	# 			else:
+	# 				result = self.try_goal(program[i].body.terms[0], program, self.combine_dicts(theta, unifier))
+	# 				newRule = Rule(program[i].head, RuleBody(program[i].body.terms[1:]))
+
+	# 				self.try_goal()
+	# 				if result:
+	# 					#return True
+	# 				else:
+	# 					continue
+	# 		else:
+	# 			continue
+	# 	return substitutedGoals
 
 	def det_query (self, program : List[Rule], pgoal : List[Term]) -> List[List[Term]]:
-		for i in range(len(pgoal)):
-			self.try_goal(pgoal[i], program)
+		# for i in range(len(pgoal)):
+		# 	self.try_goal(pgoal[i], program)
+
+		return [pgoal]
+
+
+		# def try_goal(self, goal : Term, program : List[Rule], returnList) -> bool:
+		# for i in range(len(program)):
+		# 	unifier = self.get_unifier(program[i], goal)
+		# 	if unifier is not None:
+		# 		if len(program[i].body.terms) == 0:
+		# 			#return True
+		# 			for k in range(len(resolvent)):
+		# 				resolvent[k] = self.substitute_in_term(theta, resolvent[k])
+		# 		else:
+		# 			result = True
+		# 			for j in range(len(program[i].body.terms)):
+		# 				result = self.try_goal(program[i].body.terms[j], program)
+		# 				if not result:
+		# 					break
+		# 			if result:
+		# 				return True
+		# 			else:
+		# 				continue
+		# 	else:
+		# 		continue
