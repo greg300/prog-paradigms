@@ -252,65 +252,41 @@ class Interpreter:
 	If the given goal is not a logical consequence of the program, then the result
 	is an empty list. See the test cases (in src/main.py) as examples.
 	'''
-	# def get_unifier (self, rule : Rule, goal : Term) -> dict:
-	# 	try:
-	# 		ap = self.freshen(rule)
-	# 		theta = self.unify(goal, ap.head)
-	# 		return theta
-	# 	except Not_unifiable:
-	# 		return None
+	def dfs_det_query(self, resolvent : List[Term], goal : Term, program : List[Rule], solutions : List[List[Term]]) -> bool:
+		if len(resolvent) == 0:
+			solutions.append([goal])
+			return True
+		
+		while (len(resolvent) > 0):
+			goalChoice = resolvent.pop(0)
+			searched = False
 
-	# def combine_dicts(self, d1, d2):
-	# 	res = {**d1, **d2}
-	# 	return res
+			for rule in program:
+				try:
+					#self.unify(goalChoice, rule.head)
+					rule = self.freshen(rule)
+					theta = self.unify(goalChoice, rule.head)
 
-	# def try_goal(self, goal : Term, program : List[Rule], theta : dict) -> List[Term]:
-	# 	newGoal = self.substitute_in_term(theta, goal)
-	# 	substitutedGoals = []
-	# 	for i in range(len(program)):
-	# 		unifier = self.get_unifier(program[i], newGoal)
-	# 		if unifier is not None:
-	# 			if len(program[i].body.terms) == 0:
-	# 				substitutedGoals.append(self.substitute_in_term(unifier, newGoal))
-	# 				#return True
-					
-	# 			else:
-	# 				result = self.try_goal(program[i].body.terms[0], program, self.combine_dicts(theta, unifier))
-	# 				newRule = Rule(program[i].head, RuleBody(program[i].body.terms[1:]))
+					newResolvent = copy.copy(resolvent)
+					newGoal = copy.copy(goal)
 
-	# 				self.try_goal()
-	# 				if result:
-	# 					#return True
-	# 				else:
-	# 					continue
-	# 		else:
-	# 			continue
-	# 	return substitutedGoals
+					for term in rule.body.terms:
+						newResolvent.append(term)
+					for k in range(len(newResolvent)):
+						newResolvent[k] = self.substitute_in_term(theta, newResolvent[k])
+					newGoal = self.substitute_in_term(theta, newGoal)
+
+					result = self.dfs_det_query(newResolvent, newGoal, program, solutions)
+					searched = result or searched
+				except Not_unifiable:
+					pass
+			if not searched:
+				return False
 
 	def det_query (self, program : List[Rule], pgoal : List[Term]) -> List[List[Term]]:
-		# for i in range(len(pgoal)):
-		# 	self.try_goal(pgoal[i], program)
+		solutions = []
+		goals = copy.copy(pgoal)
+		firstGoal = goals[0]
+		self.dfs_det_query(goals, firstGoal, program, solutions)
 
-		return [pgoal]
-
-
-		# def try_goal(self, goal : Term, program : List[Rule], returnList) -> bool:
-		# for i in range(len(program)):
-		# 	unifier = self.get_unifier(program[i], goal)
-		# 	if unifier is not None:
-		# 		if len(program[i].body.terms) == 0:
-		# 			#return True
-		# 			for k in range(len(resolvent)):
-		# 				resolvent[k] = self.substitute_in_term(theta, resolvent[k])
-		# 		else:
-		# 			result = True
-		# 			for j in range(len(program[i].body.terms)):
-		# 				result = self.try_goal(program[i].body.terms[j], program)
-		# 				if not result:
-		# 					break
-		# 			if result:
-		# 				return True
-		# 			else:
-		# 				continue
-		# 	else:
-		# 		continue
+		return solutions
