@@ -262,63 +262,63 @@ if __name__ == '__main__':
 
 	error_count = 0
 
-	try:
-		test_final_1_1()
-		test_final_1_2()
-		test_final_1_3()
-		test_final_1_4()
-	except AssertionError as err:
-		error_count += 1
-		_, _, tb = sys.exc_info()
-		traceback.print_tb(tb)
-	except:
-		error_count += 1
-		print("Unexpected error:", sys.exc_info()[0])
-		_, _, tb = sys.exc_info()
-		traceback.print_tb(tb)
+	# try:
+	# 	test_final_1_1()
+	# 	test_final_1_2()
+	# 	test_final_1_3()
+	# 	test_final_1_4()
+	# except AssertionError as err:
+	# 	error_count += 1
+	# 	_, _, tb = sys.exc_info()
+	# 	traceback.print_tb(tb)
+	# except:
+	# 	error_count += 1
+	# 	print("Unexpected error:", sys.exc_info()[0])
+	# 	_, _, tb = sys.exc_info()
+	# 	traceback.print_tb(tb)
+
+	# try:
+	# 	test_final_2_1()
+	# 	test_final_2_2()
+	# 	test_final_2_3()
+	# 	test_final_2_4()
+	# except AssertionError as err:
+	# 	error_count += 1
+	# 	_, _, tb = sys.exc_info()
+	# 	traceback.print_tb(tb)
+	# except:
+	# 	error_count += 1
+	# 	print("Unexpected error:", sys.exc_info()[0])
+	# 	_, _, tb = sys.exc_info()
+	# 	traceback.print_tb(tb)
+
+	# try:
+	# 	test_final_3_1()
+	# 	test_final_3_2()
+	# 	test_final_3_3()
+	# 	test_final_3_4()
+	# 	test_final_3_5()
+	# 	test_final_3_6()
+	# 	test_final_3_7()
+	# 	test_final_3_8()
+	# 	test_final_3_9()
+	# except AssertionError as err:
+	# 	error_count += 1
+	# 	_, _, tb = sys.exc_info()
+	# 	traceback.print_tb(tb)
+	# except:
+	# 	error_count += 1
+	# 	print("Unexpected error:", sys.exc_info()[0])
+	# 	_, _, tb = sys.exc_info()
+	# 	traceback.print_tb(tb)
 
 	try:
-		test_final_2_1()
-		test_final_2_2()
-		test_final_2_3()
-		test_final_2_4()
-	except AssertionError as err:
-		error_count += 1
-		_, _, tb = sys.exc_info()
-		traceback.print_tb(tb)
-	except:
-		error_count += 1
-		print("Unexpected error:", sys.exc_info()[0])
-		_, _, tb = sys.exc_info()
-		traceback.print_tb(tb)
-
-	try:
-		test_final_3_1()
-		test_final_3_2()
-		test_final_3_3()
-		test_final_3_4()
-		test_final_3_5()
-		test_final_3_6()
-		test_final_3_7()
-		test_final_3_8()
-		test_final_3_9()
-	except AssertionError as err:
-		error_count += 1
-		_, _, tb = sys.exc_info()
-		traceback.print_tb(tb)
-	except:
-		error_count += 1
-		print("Unexpected error:", sys.exc_info()[0])
-		_, _, tb = sys.exc_info()
-		traceback.print_tb(tb)
-
-	try:
-		test_final_4_1()
-		test_final_4_2()
-		test_final_4_3()
-		test_final_4_4()
-		test_final_4_5()
-		test_final_4_6()
+	# 	test_final_4_1()
+	# 	test_final_4_2()
+	# 	test_final_4_3()
+	# 	test_final_4_4()
+	# 	test_final_4_5()
+	# 	test_final_4_6()
 		test_final_4_7()
 	except AssertionError as err:
 		error_count += 1
@@ -330,19 +330,26 @@ if __name__ == '__main__':
 		_, _, tb = sys.exc_info()
 		traceback.print_tb(tb)
 
-	try:
-		test_challenge_1()
-		test_challenge_2()
-		test_challenge_3()
-		test_challenge_4()
-	except AssertionError as err:
-		error_count += 1
-		_, _, tb = sys.exc_info()
-		traceback.print_tb(tb)
-	except:
-		error_count += 1
-		print("Unexpected error:", sys.exc_info()[0])
-		_, _, tb = sys.exc_info()
-		traceback.print_tb(tb)
+	# try:
+	# 	test_challenge_1()
+	# 	test_challenge_2()
+	# 	test_challenge_3()
+	# 	test_challenge_4()
+	# except AssertionError as err:
+	# 	error_count += 1
+	# 	_, _, tb = sys.exc_info()
+	# 	traceback.print_tb(tb)
+	# except:
+	# 	error_count += 1
+	# 	print("Unexpected error:", sys.exc_info()[0])
+	# 	_, _, tb = sys.exc_info()
+	# 	traceback.print_tb(tb)
+
+	# t1 = [append (Variable("X"), Variable("Y"), \
+	# 			(cons (Number("1"), (cons (Number("2"), (cons (Number("3"), nil)))))))]
+	# t2 = [append (nil, Variable("_G46"), Variable("_G46"))]
+	# print("\nt1: " + str(t1[0]))
+	# print("\nt2: " + str(t2[0]))
+	# print(interpreter.unify (t1, t2))
 
 	print (f"{error_count} out of 5 programming questions are incorrect.")

@@ -214,7 +214,8 @@ class Interpreter:
 		for i in range(len(resolvent)):
 			for j in range(len(program)):
 				try:
-					theta = self.unify(resolvent[i], program[j])
+					ap = self.freshen(program[j])
+					theta = self.unify(resolvent[i], ap.head)
 					return True
 				except Not_unifiable:
 					continue
@@ -225,47 +226,36 @@ class Interpreter:
 		while True:
 			g = copy.copy(pgoal)
 			resolvent = copy.copy(g)
-			resolventChecked = [i for i in range(0, len(resolvent))]
 			while len(resolvent) > 0:
+				if not self.exists_unifiable_pair(resolvent, program):
+					print("No such pair.")
+					break
+
 				i = random.randint(0, len(resolvent) - 1)
-				if i in resolventChecked:
-					resolventChecked.remove(i)
-				else:
-					continue
 				a = resolvent[i]
 				
-				programCopy = copy.copy(program)
-				while len(programCopy) > 0:
-					j = random.randint(0, len(programCopy) - 1)
-					ap = self.freshen(programCopy[j])
-					try:
-						theta = self.unify(a, ap.head)
-						print("\nOld resolvent: ")
-						print(*(x for x in resolvent), sep=', ')
-						print("\nOld G: ")
-						print(*(x for x in g), sep=', ')
-						print("\nUnified " + str(a) + " and " + str(ap.head))
-						resolvent.remove(a)
-						for term in ap.body.terms:
-							resolvent.append(term)
-						for k in range(len(resolvent)):
-							resolvent[k] = self.substitute_in_term(theta, resolvent[k])
-						for k in range(len(g)):
-							g[k] = self.substitute_in_term(theta, g[k])
-						print("\nNew resolvent: ")
-						print(*(x for x in resolvent), sep=', ')
-						print("\nNew G: ")
-						print(*(x for x in g), sep=', ')
-						break
-					except Not_unifiable:
-						programCopy.remove(programCopy[j])
-				if len(programCopy) == 0:
-					print("All js checked.")
-					if len(resolventChecked) == 0:
-						print("All is checked.")
-						break
-					continue
-
+				j = random.randint(0, len(program) - 1)
+				ap = self.freshen(program[j])
+				try:
+					theta = self.unify(a, ap.head)
+					print("\nOld resolvent: ")
+					print(*(x for x in resolvent), sep=', ')
+					print("\nOld G: ")
+					print(*(x for x in g), sep=', ')
+					print("\nUnified " + str(a) + " and " + str(ap.head))
+					resolvent.remove(a)
+					for term in ap.body.terms:
+						resolvent.append(term)
+					for k in range(len(resolvent)):
+						resolvent[k] = self.substitute_in_term(theta, resolvent[k])
+					for k in range(len(g)):
+						g[k] = self.substitute_in_term(theta, g[k])
+					print("\nNew resolvent: ")
+					print(*(x for x in resolvent), sep=', ')
+					print("\nNew G: ")
+					print(*(x for x in g), sep=', ')
+				except Not_unifiable:
+					pass
 			if len(resolvent) == 0:
 				#print(g)
 				return g
